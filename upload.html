@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<!--
+    =====================================================================
+    Upload Page - 文件上传页面
+    局域网文件共享系统 - 上传界面
+    =====================================================================
+-->
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="局域网文件共享系统 - 文件上传">
+    <meta name="author" content="神2·QQ1685461536">
+    
+    <title>文件上传 - 企业文件管理系统</title>
+    
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <link rel="stylesheet" href="/static/css/main.css?v={{timestamp}}">
+    <link rel="stylesheet" href="/static/css/animate.css?v={{timestamp}}">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css?v={{timestamp}}">
+    
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📤</text></svg>">
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        .page-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+            flex-direction: row;
+            flex-wrap: nowrap;
+        }
+
+        .header-title svg {
+            color: #667eea;
+            flex-shrink: 0;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: nowrap;
+            align-items: center;
+        }
+        
+        .nav-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .nav-btn.primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .nav-btn.secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .nav-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+        
+        .upload-section {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .upload-zone {
+            border: 3px dashed #d1d5db;
+            border-radius: 16px;
+            padding: 60px 40px;
+            text-align: center;
+            transition: all 0.3s;
+            background: #fafafa;
+        }
+        
+        .upload-zone:hover,
+        .upload-zone.dragover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .upload-title {
+            color: #333;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .upload-description {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+        
+        .file-input {
+            display: none !important;
+            visibility: hidden;
+            position: absolute;
+            width: 0;
+            height: 0;
+            opacity: 0;
+            overflow: hidden;
+            z-index: -9999;
+        }
+        
+        .upload-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .upload-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .upload-button svg {
+            width: 20px;
+            height: 20px;
+        }
+        
+        .upload-info {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            text-align: left;
+        }
+        
+        .upload-info h3 {
+            margin: 0 0 15px 0;
+            color: #333;
+            font-size: 16px;
+        }
+        
+        .upload-info p {
+            margin: 8px 0;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .upload-info p svg {
+            width: 16px;
+            height: 16px;
+            vertical-align: text-bottom;
+            margin-right: 6px;
+            color: #667eea;
+        }
+        
+        .progress-container {
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e1e5e9;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        .progress-text {
+            margin-top: 10px;
+            color: #666;
+            font-size: 14px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <header class="header">
+            <h1 class="header-title">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M17 8L12 3L7 8" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 3V15" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                文件上传
+            </h1>
+            <div class="nav-buttons">
+                <button class="nav-btn secondary" onclick="window.location.href='/files'">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2">
+                        <path d="M3 3H21V21H3V3Z" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M9 3V21" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M15 3V21" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    文件列表
+                </button>
+                <button class="nav-btn secondary" onclick="logout()">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M16 17L21 12L16 7" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M21 12H9" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    退出登录
+                </button>
+            </div>
+        </header>
+        
+        <section class="upload-section">
+            <div class="upload-zone" id="uploadArea" role="region" aria-label="文件上传区域">
+                <h2 class="upload-title">上传文件</h2>
+                <p class="upload-description">拖拽文件到此处，或点击下方按钮选择文件</p>
+
+                <input type="file" id="fileInput" class="file-input" multiple aria-label="选择要上传的文件">
+                <button class="upload-button" onclick="document.getElementById('fileInput').click()">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5V19" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M5 12H19" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    选择文件
+                </button>
+            </div>
+            
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text" id="progressText">上传中...</div>
+            </div>
+            
+            <div class="upload-info">
+                <h3>上传说明</h3>
+                <p>
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 16V12" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 8H12.01" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    支持拖拽上传多个文件
+                </p>
+                <p>
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 16V12" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 8H12.01" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    文件将上传到当前目录
+                </p>
+                <p>
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 16V12" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 8H12.01" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    支持所有常见文件格式
+                </p>
+            </div>
+        </section>
+    </div>
+    
+    <script src="/static/js/jquery.min.js?v={{timestamp}}"></script>
+    <script src="/static/js/bootstrap.min.js?v={{timestamp}}"></script>
+    <script src="/static/js/bootstrap-notify.min.js?v={{timestamp}}"></script>
+    <script src="/static/js/lightyear.js?v={{timestamp}}"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查登录状态
+            const savedAuth = localStorage.getItem('authStatus');
+            if (savedAuth !== 'authenticated') {
+                window.location.href = '/login';
+            }
+            
+            initUploadZone();
+        });
+        
+        function initUploadZone() {
+            const uploadArea = document.getElementById('uploadArea');
+            const fileInput = document.getElementById('fileInput');
+            const progressContainer = document.getElementById('progressContainer');
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            
+            // 拖拽事件
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            ['dragenter', 'dragover'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, () => uploadArea.classList.add('dragover'), false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, () => uploadArea.classList.remove('dragover'), false);
+            });
+            
+            uploadArea.addEventListener('drop', (e) => {
+                const files = e.dataTransfer.files;
+                handleFiles(files);
+            }, false);
+            
+            fileInput.addEventListener('change', (e) => {
+                handleFiles(e.target.files);
+            });
+        }
+        
+        function handleFiles(files) {
+            if (files.length === 0) return;
+            
+            const uploadPath = '/upload/';
+            const formData = new FormData();
+            
+            for (let i = 0; i < files.length; i++) {
+                formData.append('file', files[i]);
+            }
+            
+            // 显示进度条
+            const progressContainer = document.getElementById('progressContainer');
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            
+            progressContainer.style.display = 'block';
+            progressFill.style.width = '0%';
+            progressText.textContent = '上传中...';
+            
+            // 显示加载动画
+            if (typeof lightyear !== 'undefined') {
+                lightyear.loading('show');
+            }
+            
+            fetch(uploadPath, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (typeof lightyear !== 'undefined') {
+                    lightyear.loading('hide');
+                }
+                
+                if (data.success) {
+                    progressFill.style.width = '100%';
+                    progressText.textContent = '上传成功！';
+                    
+                    if (typeof lightyear !== 'undefined') {
+                        lightyear.notify('文件上传成功！', 'success', 2000, '', 'top', 'center');
+                    }
+                    
+                    setTimeout(() => {
+                        progressContainer.style.display = 'none';
+                    }, 2000);
+                } else {
+                    progressText.textContent = '上传失败：' + (data.error || '未知错误');
+                    if (typeof lightyear !== 'undefined') {
+                        lightyear.notify('上传失败：' + (data.error || '未知错误'), 'danger', 3000, '', 'top', 'center');
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('上传错误:', error);
+                if (typeof lightyear !== 'undefined') {
+                    lightyear.loading('hide');
+                }
+                
+                progressText.textContent = '上传失败：网络错误';
+                if (typeof lightyear !== 'undefined') {
+                    lightyear.notify('上传失败：网络连接异常', 'danger', 3000, '', 'top', 'center');
+                }
+            });
+        }
+        
+        function logout() {
+            localStorage.removeItem('authStatus');
+            window.location.href = '/login';
+        }
+    </script>
+
+    <!-- 版权信息 -->
+    <footer style="text-align: center; padding: 30px 20px; color: #666; font-size: 14px; margin-top: 40px; border-top: 1px solid #e0e0e0;">
+        <p style="margin: 0 0 10px 0; font-weight: 500; color: #333;">&copy; 2026 局域网文件共享系统</p>
+        <p style="margin: 0 0 8px 0;">版权所有 by QQ1685461536需要服务器加</p>
+        <p style="margin: 0;">
+            <a href="https://github.com/taoheping/LANFileSharingTool.git" target="_blank" style="color: #667eea; text-decoration: none;">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align: text-bottom; margin-right: 4px;">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+                开源地址
+            </a>
+        </p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<!--
+    =====================================================================
+    Login Page - 登录页面
+    局域网文件共享系统 - 登录界面
+    =====================================================================
+-->
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="局域网文件共享系统 - 登录">
+    <meta name="author" content="神2·QQ1685461536">
+    
+    <title>登录 - 局域网文件管理系统</title>
+    
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <link rel="stylesheet" href="/static/css/main.css?v={{timestamp}}">
+    <link rel="stylesheet" href="/static/css/animate.css?v={{timestamp}}">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css?v={{timestamp}}">
+    
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
+    
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+        }
+        
+        .login-wrapper {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+        }
+        
+        .login-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .login-logo {
+            margin-bottom: 30px;
+        }
+        
+        .login-logo svg {
+            width: 80px;
+            height: 80px;
+            color: #667eea;
+        }
+        
+        .login-title {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        
+        .login-subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .auth-form {
+            text-align: left;
+        }
+        
+        .auth-input-group {
+            margin-bottom: 20px;
+        }
+        
+        .auth-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .auth-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+        
+        .auth-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .auth-button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .auth-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .auth-button:active {
+            transform: translateY(0);
+        }
+        
+        .button-icon {
+            width: 20px;
+            height: 20px;
+        }
+        
+        .login-footer {
+            margin-top: 25px;
+            color: #999;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        
+        .login-footer svg {
+            width: 14px;
+            height: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-wrapper">
+        <div class="login-card">
+            <div class="login-logo">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5">
+                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 16V12" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 8H12.01" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            
+            <h1 class="login-title">欢迎回来</h1>
+            <p class="login-subtitle">请登录以访问文件管理系统</p>
+            
+            <form class="auth-form" id="authForm" onsubmit="handleLogin(event)">
+                <div class="auth-input-group">
+                    <label for="username" class="auth-label">用户名</label>
+                    <input type="text" id="username" name="username" class="auth-input" placeholder="请输入用户名" required autocomplete="username">
+                </div>
+                
+                <div class="auth-input-group">
+                    <label for="password" class="auth-label">密码</label>
+                    <input type="password" id="password" name="password" class="auth-input" placeholder="请输入密码" required autocomplete="current-password">
+                </div>
+                
+                <button type="submit" class="auth-button">
+                    <svg class="button-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 16V12" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 8H12.01" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    登录
+                </button>
+            </form>
+            
+            <p class="login-footer">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 16V12" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 8H12.01" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                请联系管理员获取登录凭据
+            </p>
+              <footer style="text-align: center; padding: 30px 20px; color: #666; font-size: 14px; margin-top: 40px; border-top: 1px solid #e0e0e0;">
+        <p style="margin: 0 0 10px 0; font-weight: 500; color: #333;">&copy; 2026 局域网文件共享系统</p>
+        <p style="margin: 0 0 8px 0;">版权所有 by QQ1685461536需要服务器加</p>
+        <p style="margin: 0;">
+            <a href="https://github.com/taoheping/LANFileSharingTool.git" target="_blank" style="color: #667eea; text-decoration: none;">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align: text-bottom; margin-right: 4px;">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+                开源地址
+            </a>
+        </p>
+    </footer>
+        </div>
+    </div>
+    
+    <script src="/static/js/jquery.min.js?v={{timestamp}}"></script>
+    <script src="/static/js/bootstrap.min.js?v={{timestamp}}"></script>
+    <script src="/static/js/bootstrap-notify.min.js?v={{timestamp}}"></script>
+    <script src="/static/js/lightyear.js?v={{timestamp}}"></script>
+    
+    <script>
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查是否已登录
+            const savedAuth = localStorage.getItem('authStatus');
+            if (savedAuth === 'authenticated') {
+                window.location.href = '/files';
+            }
+        });
+        
+        // 处理登录
+        function handleLogin(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // 显示加载动画
+            if (typeof lightyear !== 'undefined') {
+                lightyear.loading('show');
+            }
+
+            // 发送登录请求
+            fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (typeof lightyear !== 'undefined') {
+                    lightyear.loading('hide');
+                }
+
+                if (data.success) {
+                    localStorage.setItem('authStatus', 'authenticated');
+                    
+                    if (typeof lightyear !== 'undefined') {
+                        lightyear.notify('登录成功，正在跳转...', 'success', 1500, '', 'top', 'center');
+                    }
+                    
+                    setTimeout(() => {
+                        window.location.href = '/files';
+                    }, 1500);
+                } else {
+                    if (typeof lightyear !== 'undefined') {
+                        lightyear.notify('用户名或密码错误，请重试', 'danger', 2000, '', 'top', 'center');
+                    } else {
+                        alert('用户名或密码错误，请重试');
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('登录错误:', error);
+                if (typeof lightyear !== 'undefined') {
+                    lightyear.loading('hide');
+                    lightyear.notify('登录失败，网络连接异常', 'danger', 2000, '', 'top', 'center');
+                } else {
+                    alert('登录失败，网络连接异常');
+                }
+            });
+        }
+    </script>
+
+    <!-- 版权信息 -->
+  
+</body>
+</html>

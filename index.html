@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<!--
+    =====================================================================
+    Enterprise File Manager - HTML Template
+    局域网文件共享系统 - 文件管理界面
+    =====================================================================
+    说明:
+    - 本文件为文件管理器的HTML模板
+    - 使用模板变量系统实现动态内容替换
+    - 支持响应式布局和现代化UI设计
+    - 包含完整的SEO优化和可访问性支持
+    
+    模板变量说明:
+    - {{pageTitle}}: 页面标题，动态显示当前路径
+    - {{breadcrumb}}: 面包屑导航，显示当前目录路径
+    - {{backLink}}: 返回上级目录链接（条件显示）
+    - {{port}}: 服务器端口号
+    - {{uploadPath}}: 文件上传API路径
+    - {{fileList}}: 文件列表HTML内容
+    - {{enableAuth}}: 是否启用身份验证 (true/false)
+    - {{authStatus}}: 身份验证状态显示
+    
+    作者: 神2·QQ1685461536
+    版本: 2.0.0
+    最后更新: 2026-03-30
+    =====================================================================
+-->
+<html lang="zh-CN">
+<head>
+    <!-- 
+        网页元数据设置
+        - charset: 设置UTF-8编码支持多语言
+        - viewport: 优化移动设备显示效果
+        - description: SEO优化描述
+    -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="局域网文件共享系统 - 安全、高效的文件管理解决方案">
+    <meta name="keywords" content="文件共享,局域网,文件管理,企业存储">
+    <meta name="author" content="神2·QQ1685461536">
+    
+    <!-- 页面标题 - 动态模板变量 -->
+    <title>{{pageTitle}} - 企业文件管理系统</title>
+    
+    <!-- 防缓存的元标签 -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <!-- 唯一版本标识符 - 强制浏览器刷新 -->
+    <meta name="page-version" content="{{timestamp}}">
+    
+    <!--
+        引入外部资源
+        - CSS文件: 管理所有界面样式
+        - 使用相对路径通过静态文件服务加载
+        - 添加时间戳参数防止缓存
+    -->
+    <link rel="stylesheet" href="/static/css/main.css?v={{timestamp}}">
+
+    <!--
+        引入 LightYear 通知组件所需 CSS
+        - animate.css: 动画效果
+        - Bootstrap CSS: Bootstrap 样式（用于通知组件）
+        - 添加时间戳参数防止缓存
+    -->
+    <link rel="stylesheet" href="/static/css/animate.css?v={{timestamp}}">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css?v={{timestamp}}">
+
+    <!-- 添加网站图标 (可选) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📁</text></svg>">
+</head>
+
+<body>
+    <!-- 
+        顶部导航栏
+        - 显示系统名称和当前路径
+        - 包含返回根目录的导航按钮
+        - 使用渐变背景增强视觉效果
+    -->
+    <header class="app-header">
+        <div class="header-content">
+            <!-- 系统标题 -->
+            <h1 class="app-title">
+                <svg class="logo-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 7V17C3 18.1046 3.89543 19 5 19H19C20.1046 19 21 18.1046 21 17V9C21 7.89543 20.1046 7 19 7H12L10 5H5C3.89543 5 3 5.89543 3 7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                企业文件共享系统
+            </h1>
+            
+            <!-- 面包屑导航 - 显示当前目录路径 -->
+            <div class="breadcrumb-nav">
+                <svg class="breadcrumb-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 9L9 15L15 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M9 3V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="breadcrumb-text">{{breadcrumb}}</span>
+            </div>
+        </div>
+        
+        <div class="header-actions">
+            <!-- 身份验证状态显示 -->
+            <div class="auth-status" id="authStatus">
+                {{authStatus}}
+            </div>
+            
+            <!-- 返回根目录按钮 - 条件显示 -->
+            {{backLink}}
+        </div>
+    </header>
+    
+    <!-- 
+        身份验证区域 - 当启用身份验证时显示
+        - 登录表单
+        - 登录状态提示
+    -->
+    <div class="auth-container" id="authContainer" style="display: none;">
+        <div class="auth-panel">
+            <div class="auth-icon">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 16V12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 8H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <h3 class="auth-title">身份验证</h3>
+            <p class="auth-description">请输入用户名和密码以访问文件系统</p>
+            
+            <form class="auth-form" id="authForm" onsubmit="handleLogin(event)">
+                <div class="auth-input-group">
+                    <label for="username" class="auth-label">用户名</label>
+                    <input type="text" id="username" name="username" class="auth-input" placeholder="请输入用户名" required autocomplete="username">
+                </div>
+                
+                <div class="auth-input-group">
+                    <label for="password" class="auth-label">密码</label>
+                    <input type="password" id="password" name="password" class="auth-input" placeholder="请输入密码" required autocomplete="current-password">
+                </div>
+                
+                <button type="submit" class="auth-button">
+                    <svg class="button-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 16V12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 8H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    登录
+                </button>
+            </form>
+            
+            <p class="auth-footer">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 16V12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 8H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                请联系管理员获取登录凭据
+            </p>
+        </div>
+    </div>
+    
+    <!-- 
+        文件上传区域
+        - 支持拖拽上传
+        - 支持点击选择文件
+        - 包含视觉反馈效果
+        - 显示上传说明和操作按钮
+    -->
+    <div class="upload-zone" id="uploadArea" role="region" aria-label="文件上传区域">
+        <div class="upload-zone-content">
+            <!-- 上传图标 -->
+            <div class="upload-icon-wrapper">
+                <svg class="upload-icon" width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M17 8L12 3L7 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 3V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            
+            <!-- 上传说明文本 -->
+            <h3 class="upload-title">上传文件到当前目录</h3>
+            <p class="upload-description">拖拽文件到此处，或点击下方按钮选择文件</p>
+            
+            <!-- 文件选择输入框 - 隐藏的input元素 -->
+            <input type="file" id="fileInput" class="file-input" multiple aria-label="选择要上传的文件" style="display: none !important; visibility: hidden; position: absolute; width: 0; height: 0; opacity: 0; overflow: hidden;">
+            
+            <!-- 上传按钮 -->
+            <button class="upload-button" onclick="document.getElementById('fileInput').click()">
+                <svg class="button-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 5V19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                选择文件
+            </button>
+        </div>
+    </div>
+    
+    <!-- 
+        文件列表容器
+        - 显示当前目录下的所有文件和文件夹
+        - 动态内容由服务器端生成
+        - 支持点击导航和下载操作
+    -->
+    <div class="file-list-container">
+        <div class="file-list-header">
+            <h2 class="section-title">
+                <svg class="section-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 3H21V21H3V3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M9 3V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M15 3V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                文件列表
+            </h2>
+            <div class="file-count" id="fileCount"></div>
+        </div>
+        
+        <!-- 文件列表内容 - 动态模板变量 -->
+        <div class="file-list">
+            {{fileList}}
+        </div>
+    </div>
+    
+    <!-- 
+        页脚信息
+        - 显示版权信息
+        - 显示服务器运行状态
+        - 包含版本号和链接
+    -->
+    <footer class="app-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <strong>局域网文件管理系统</strong>
+                <span class="version-tag">v2.0.0</span>
+            </div>
+            <div class="footer-info">
+                <p class="server-status">
+                    <span class="status-dot online"></span>
+                    服务运行中 - 端口 {{port}}
+                </p>
+                <p class="copyright">© 2026 神2·QQ1685461536需要服务器加. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!--
+        引入LightYear通知组件
+        - jQuery依赖
+        - Bootstrap Notify插件
+        - LightYear通知包装器
+        - 添加时间戳参数防止缓存
+    -->
+    <script src="/static/js/jquery.min.js?v={{timestamp}}"></script>
+    <script src="/static/js/bootstrap.min.js?v={{timestamp}}"></script>
+    <script src="/static/js/bootstrap-notify.min.js?v={{timestamp}}"></script>
+    <script src="/static/js/lightyear.js?v={{timestamp}}"></script>
+
+    <!--
+        引入前端JavaScript
+        - 使用data-upload-path属性传递上传路径
+        - 异步加载不影响页面渲染
+        - 脚本放在body底部优化加载性能
+        - 添加时间戳参数防止缓存
+    -->
+    <script src="/static/app.js?v={{timestamp}}" data-upload-path="{{uploadPath}}" defer></script>
+
+    <!-- 调试代码 - 检查上传区域数量 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                const uploadZones = document.querySelectorAll('.upload-zone');
+                const fileInputs = document.querySelectorAll('input[type="file"]');
+                const uploadButtons = document.querySelectorAll('.upload-button');
+
+                console.log('=== UPLOAD ZONE DIAGNOSIS ===');
+                console.log('Upload zones found:', uploadZones.length);
+                console.log('File inputs found:', fileInputs.length);
+                console.log('Upload buttons found:', uploadButtons.length);
+
+                if (uploadZones.length > 1) {
+                    console.error('ERROR: Multiple upload zones detected!');
+                    uploadZones.forEach((zone, i) => {
+                        console.log(`Zone ${i + 1}:`, {
+                            id: zone.id,
+                            classes: zone.className,
+                            visible: zone.offsetWidth > 0 && zone.offsetHeight > 0,
+                            parent: zone.parentElement?.tagName
+                        });
+                    });
+                }
+
+                if (fileInputs.length > 1) {
+                    console.error('ERROR: Multiple file inputs detected!');
+                    fileInputs.forEach((input, i) => {
+                        console.log(`Input ${i + 1}:`, {
+                            id: input.id,
+                            classes: input.className,
+                            parent: input.parentElement?.id
+                        });
+                    });
+                }
+            }, 100);
+        });
+    </script>
+    
+    <!-- 
+        身份验证和页面控制脚本
+        - 处理登录逻辑
+        - 控制页面元素显示
+    -->
+    <script>
+        // 页面配置
+        const pageConfig = {
+            enableAuth: {{enableAuth}}, // 身份验证开关
+            isAuthenticated: false // 登录状态
+        };
+        
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            const authContainer = document.getElementById('authContainer');
+            const mainContent = document.querySelector('.upload-zone');
+            const fileContainer = document.querySelector('.file-list-container');
+
+            // 根据配置显示/隐藏身份验证界面
+            if (pageConfig.enableAuth) {
+                // 检查localStorage中是否有登录状态
+                const savedAuth = localStorage.getItem('authStatus');
+                if (savedAuth === 'authenticated') {
+                    // 已登录，显示主界面
+                    showMainContent();
+                } else {
+                    // 未登录，显示登录界面
+                    authContainer.style.display = 'block';
+                    if (mainContent) mainContent.style.display = 'none';
+                    if (fileContainer) fileContainer.style.display = 'none';
+                }
+            } else {
+                // 未启用身份验证，直接显示主界面
+                authContainer.style.display = 'none';
+                if (mainContent) mainContent.style.display = 'block';
+                if (fileContainer) fileContainer.style.display = 'block';
+            }
+        });
+        
+        // 处理登录
+        function handleLogin(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // 显示加载动画
+            if (typeof lightyear !== 'undefined') {
+                lightyear.loading('show');
+            }
+
+            // 发送登录请求
+            fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // 隐藏加载动画
+                if (typeof lightyear !== 'undefined') {
+                    lightyear.loading('hide');
+                }
+
+                if (data.success) {
+                    // 登录成功
+                    localStorage.setItem('authStatus', 'authenticated');
+                    pageConfig.isAuthenticated = true;
+                    showMainContent();
+                    // 使用 LightYear 通知显示成功消息
+                    if (typeof lightyear !== 'undefined') {
+                        lightyear.notify('登录成功，欢迎回来！', 'success', 2000, '', 'top', 'center');
+                    }
+                } else {
+                    // 登录失败 - 使用 LightYear 通知显示错误消息
+                    if (typeof lightyear !== 'undefined') {
+                        lightyear.notify('用户名或密码错误，请重试', 'danger', 2000, '', 'top', 'center');
+                    } else {
+                        console.error('登录失败: 用户名或密码错误');
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('登录错误:', error);
+                // 隐藏加载动画
+                if (typeof lightyear !== 'undefined') {
+                    lightyear.loading('hide');
+                }
+                // 使用 LightYear 通知显示网络错误
+                if (typeof lightyear !== 'undefined') {
+                    lightyear.notify('登录失败，网络连接异常', 'danger', 2000, '', 'top', 'center');
+                } else {
+                    console.error('登录失败，请稍后重试');
+                }
+            });
+        }
+        
+        // 显示主内容
+        function showMainContent() {
+            const authContainer = document.getElementById('authContainer');
+            const mainContent = document.querySelector('.upload-zone');
+            const fileContainer = document.querySelector('.file-list-container');
+            const authStatus = document.getElementById('authStatus');
+            
+            // 隐藏登录界面
+            if (authContainer) authContainer.style.display = 'none';
+            
+            // 显示主内容
+            if (mainContent) mainContent.style.display = 'block';
+            if (fileContainer) fileContainer.style.display = 'block';
+            
+            // 更新身份验证状态显示
+            if (authStatus) {
+                authStatus.innerHTML = `
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    已登录
+                `;
+            }
+        }
+        
+        // 显示通知消息（已弃用，使用 LightYear 通知组件替代）
+        function showNotification(message, type) {
+            console.log(`[${type.toUpperCase()}] ${message}`);
+
+            // 优先使用 LightYear 通知组件
+            if (typeof lightyear !== 'undefined') {
+                const notifyType = type === 'error' ? 'danger' : type === 'success' ? 'success' : 'info';
+                lightyear.notify(message, notifyType, 2000, '', 'top', 'center');
+            } else {
+                // 降级方案：仅在控制台输出
+                console.log(message);
+            }
+        }
+        
+        // 退出登录
+        function logout() {
+            localStorage.removeItem('authStatus');
+            pageConfig.isAuthenticated = false;
+            location.reload();
+        }
+    </script>
+</body>
+</html>
