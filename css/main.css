@@ -1,0 +1,1165 @@
+/**
+ * ====================================================================
+ * Enterprise File Manager - Stylesheet
+ * 局域网文件共享系统 - 样式表
+ * ====================================================================
+ * 说明:
+ * - 本文件包含所有前端界面的样式定义
+ * - 采用BEM命名规范提高可维护性
+ * - 支持响应式设计和暗黑模式
+ * - 优化动画效果和用户体验
+ * - 兼容主流现代浏览器
+ * 
+ * 设计规范:
+ * - 主色调: #2563eb (企业蓝)
+ * - 辅助色: #64748b (中性灰)
+ * - 成功色: #10b981 (绿色)
+ * - 警告色: #f59e0b (橙色)
+ * - 错误色: #ef4444 (红色)
+ * - 圆角: 8px / 12px
+ * - 阴影: 0 4px 6px -1px rgba(0, 0, 0, 0.1)
+ * 
+ * 作者: 神2·QQ1685461536
+ * 版本: 2.0.0
+ * 最后更新: 2026-03-30
+ * ====================================================================
+ */
+
+/* ==================== 全局样式重置 ==================== */
+
+/**
+ * CSS变量定义
+ * 集中管理颜色、间距、字体等设计令牌
+ */
+:root {
+    /* 主色调 */
+    --color-primary: #2563eb;
+    --color-primary-hover: #1d4ed8;
+    --color-primary-light: #dbeafe;
+    
+    /* 辅助色 */
+    --color-secondary: #64748b;
+    --color-secondary-hover: #475569;
+    
+    /* 背景色 */
+    --color-bg-primary: #ffffff;
+    --color-bg-secondary: #f8fafc;
+    --color-bg-tertiary: #f1f5f9;
+    
+    /* 文字颜色 */
+    --color-text-primary: #0f172a;
+    --color-text-secondary: #64748b;
+    --color-text-tertiary: #94a3b8;
+    
+    /* 功能色 */
+    --color-success: #10b981;
+    --color-warning: #f59e0b;
+    --color-error: #ef4444;
+    --color-info: #3b82f6;
+    
+    /* 间距系统 */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    --spacing-2xl: 48px;
+    
+    /* 字体系统 */
+    --font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    --font-size-xs: 12px;
+    --font-size-sm: 14px;
+    --font-size-base: 16px;
+    --font-size-lg: 18px;
+    --font-size-xl: 20px;
+    --font-size-2xl: 24px;
+    --font-size-3xl: 30px;
+    
+    /* 圆角系统 */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-full: 9999px;
+    
+    /* 阴影系统 */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    
+    /* 过渡效果 */
+    --transition-fast: 150ms ease;
+    --transition-base: 300ms ease;
+    --transition-slow: 500ms ease;
+}
+
+/**
+ * 全局样式重置
+ * 消除浏览器默认样式差异，建立统一的设计基础
+ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/**
+ * HTML和Body基础样式
+ * 设置页面默认字体、背景色和文字颜色
+ */
+html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: var(--font-family-base);
+    line-height: 1.6;
+    color: var(--color-text-primary);
+    background-color: var(--color-bg-secondary);
+    min-height: 100vh;
+    padding: var(--spacing-lg);
+}
+
+/* ==================== 顶部导航栏 ==================== */
+
+/**
+ * 应用头部样式
+ * 采用渐变背景，提升视觉层次感
+ */
+.app-header {
+    background: linear-gradient(135deg, var(--color-primary) 0%, #1e40af 100%);
+    color: white;
+    padding: var(--spacing-lg) var(--spacing-xl);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--spacing-lg);
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* 头部背景装饰效果 */
+.app-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 300px;
+    height: 300px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+}
+
+/**
+ * 头部内容容器
+ * 左侧显示标题和导航，右侧显示操作按钮
+ */
+.header-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    position: relative;
+    z-index: 1;
+}
+
+/**
+ * 应用标题样式
+ * 包含logo图标和文字
+ */
+.app-title {
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.logo-icon {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/**
+ * 面包屑导航
+ * 显示当前目录路径，方便用户了解当前位置
+ */
+.breadcrumb-nav {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: var(--font-size-sm);
+    opacity: 0.9;
+}
+
+.breadcrumb-icon {
+    opacity: 0.7;
+}
+
+.breadcrumb-text {
+    font-weight: 500;
+}
+
+/**
+ * 返回根目录链接
+ * 白色文字链接，hover时增加下划线效果
+ */
+.back-link {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    position: relative;
+    z-index: 1;
+}
+
+.back-link:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+    text-decoration: none;
+}
+
+/* ==================== 上传区域 ==================== */
+
+/**
+ * 上传区域容器
+ * 支持拖拽上传的交互区域
+ */
+.upload-zone {
+    border: 2px dashed var(--color-primary);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-2xl);
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+    background: var(--color-bg-primary);
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-sm);
+}
+
+.upload-zone:hover {
+    border-color: var(--color-primary-hover);
+    background: var(--color-bg-secondary);
+    box-shadow: var(--shadow-md);
+}
+
+/**
+ * 拖拽上传激活状态
+ * 当用户拖拽文件到区域上方时的视觉反馈
+ */
+.upload-zone.drag-over {
+    border-color: var(--color-primary-hover);
+    background: var(--color-primary-light);
+    box-shadow: var(--shadow-lg);
+    transform: scale(1.01);
+}
+
+/**
+ * 上传区域内容容器
+ */
+.upload-zone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+/**
+ * 上传图标包装器
+ */
+.upload-icon-wrapper {
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-primary);
+    transition: transform var(--transition-base);
+}
+
+.upload-zone:hover .upload-icon-wrapper {
+    transform: scale(1.1);
+}
+
+.upload-icon {
+    width: 64px;
+    height: 64px;
+}
+
+/**
+ * 上传标题和描述
+ */
+.upload-title {
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin: 0;
+}
+
+.upload-description {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin: 0;
+}
+
+/**
+ * 隐藏的文件输入框
+ * 实际的文件选择控件，但通过样式隐藏
+ */
+.file-input {
+    display: none;
+}
+
+/**
+ * 上传按钮样式
+ * 主要操作按钮，采用渐变背景
+ */
+.upload-button {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+    color: white;
+    border: none;
+    padding: var(--spacing-md) var(--spacing-xl);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: var(--font-size-base);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-fast);
+}
+
+.upload-button:hover {
+    background: linear-gradient(135deg, var(--color-primary-hover) 0%, #1e3a8a 100%);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+}
+
+.upload-button:active {
+    transform: translateY(0);
+}
+
+.button-icon {
+    width: 20px;
+    height: 20px;
+}
+
+/* ==================== 文件列表 ==================== */
+
+/**
+ * 文件列表容器
+ * 包含文件列表的整体容器
+ */
+.file-list-container {
+    background: var(--color-bg-primary);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+}
+
+/**
+ * 文件列表头部
+ * 显示标题和文件数量统计
+ */
+.file-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-lg) var(--spacing-xl);
+    border-bottom: 1px solid var(--color-bg-tertiary);
+    background: var(--color-bg-secondary);
+}
+
+.section-title {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.section-icon {
+    color: var(--color-primary);
+}
+
+.file-count {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    background: var(--color-bg-tertiary);
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: var(--radius-full);
+    font-weight: 500;
+}
+
+/**
+ * 文件列表主体
+ * 实际显示文件项的区域
+ */
+.file-list {
+    display: flex;
+    flex-direction: column;
+}
+
+/**
+ * 文件项样式
+ * 每个文件或文件夹的显示项
+ */
+.file-item {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-lg) var(--spacing-xl);
+    border-bottom: 1px solid var(--color-bg-tertiary);
+    transition: all var(--transition-fast);
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+.file-item:last-child {
+    border-bottom: none;
+}
+
+.file-item:hover {
+    background: var(--color-bg-secondary);
+    transform: translateX(4px);
+}
+
+/**
+ * 文件图标
+ * 显示文件类型图标
+ */
+.file-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: var(--spacing-md);
+    border-radius: var(--radius-md);
+    color: var(--color-primary);
+    font-size: 24px;
+    flex-shrink: 0;
+    transition: transform var(--transition-fast);
+}
+
+.file-item:hover .file-icon {
+    transform: scale(1.1);
+}
+
+/**
+ * 文件信息区域
+ * 显示文件名和元数据
+ */
+.file-info {
+    flex: 1;
+    min-width: 0;
+}
+
+/**
+ * 文件名样式
+ * 支持长文件名省略显示
+ */
+.file-name {
+    font-weight: 600;
+    margin-bottom: var(--spacing-xs);
+    color: var(--color-text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/**
+ * 文件元数据
+ * 显示修改时间、文件类型等信息
+ */
+.file-meta {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+}
+
+/**
+ * 文件大小
+ * 右对齐显示文件大小
+ */
+.file-size {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    text-align: right;
+    font-weight: 500;
+    font-feature-settings: "tnum";
+    flex-shrink: 0;
+    margin-right: var(--spacing-sm);
+}
+
+/**
+ * 下载图标
+ * 显示在文件项右侧的下载按钮
+ * 只有下载图标可以点击下载文件
+ */
+.download-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    color: var(--color-primary);
+    background-color: var(--color-primary-light);
+    transition: all var(--transition-fast);
+    flex-shrink: 0;
+    opacity: 0;
+    transform: translateX(10px);
+    text-decoration: none;
+}
+
+.file-item:hover .download-icon {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.download-icon:hover {
+    background-color: var(--color-primary);
+    color: white;
+    transform: scale(1.1) translateX(0);
+}
+
+.download-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* ==================== 页脚 ==================== */
+
+/**
+ * 应用页脚
+ * 显示版权信息和服务器状态
+ */
+.app-footer {
+    margin-top: var(--spacing-2xl);
+    padding: var(--spacing-lg) 0;
+    text-align: center;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: var(--font-size-base);
+    color: var(--color-text-primary);
+}
+
+.version-tag {
+    font-size: var(--font-size-xs);
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+}
+
+.footer-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+/**
+ * 服务器状态指示器
+ */
+.server-status {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.status-dot.online {
+    background: var(--color-success);
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.copyright {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-tertiary);
+    margin: 0;
+}
+
+/* ==================== 响应式设计 ==================== */
+
+/**
+ * 平板设备适配 (768px - 1024px)
+ */
+@media (max-width: 1024px) {
+    body {
+        padding: var(--spacing-md);
+    }
+    
+    .app-header {
+        flex-direction: column;
+        gap: var(--spacing-md);
+        text-align: center;
+        padding: var(--spacing-lg);
+    }
+    
+    .header-content {
+        align-items: center;
+    }
+    
+    .file-item {
+        padding: var(--spacing-md) var(--spacing-lg);
+    }
+    
+    .file-icon {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+/**
+ * 移动设备适配 (最大768px)
+ */
+@media (max-width: 768px) {
+    body {
+        padding: var(--spacing-sm);
+    }
+    
+    .app-title {
+        font-size: var(--font-size-lg);
+    }
+    
+    .app-header {
+        padding: var(--spacing-md);
+    }
+    
+    .upload-zone {
+        padding: var(--spacing-lg);
+    }
+    
+    .upload-icon {
+        width: 48px;
+        height: 48px;
+    }
+    
+    .upload-title {
+        font-size: var(--font-size-base);
+    }
+    
+    .file-list-header {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        align-items: flex-start;
+    }
+    
+    .file-item {
+        padding: var(--spacing-sm) var(--spacing-md);
+        flex-wrap: wrap;
+    }
+    
+    .file-icon {
+        width: 36px;
+        height: 36px;
+        margin-right: var(--spacing-sm);
+    }
+    
+    .file-info {
+        flex: 1;
+        min-width: calc(100% - 48px);
+    }
+    
+    .file-size {
+        width: 100%;
+        text-align: left;
+        margin-top: var(--spacing-xs);
+    }
+    
+    .footer-content {
+        gap: var(--spacing-xs);
+    }
+    
+    .footer-info {
+        font-size: var(--font-size-xs);
+    }
+}
+
+/* ==================== 打印样式 ==================== */
+
+@media print {
+    .app-header,
+    .upload-zone,
+    .app-footer {
+        display: none;
+    }
+    
+    .file-list-container {
+        box-shadow: none;
+    }
+    
+    .file-item {
+        break-inside: avoid;
+    }
+}
+
+/* ==================== 可访问性增强 ==================== */
+
+/**
+ * 焦点样式
+ * 提升键盘导航体验
+ */
+*:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/**
+ * 减少动画（用户偏好设置）
+ */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/**
+ * 高对比度模式
+ */
+@media (prefers-contrast: high) {
+    :root {
+        --color-text-primary: #000000;
+        --color-text-secondary: #333333;
+        --color-bg-primary: #ffffff;
+        --color-bg-secondary: #f0f0f0;
+    }
+}
+
+/* ==================== 暗黑模式支持 ==================== */
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-bg-primary: #1e293b;
+        --color-bg-secondary: #0f172a;
+        --color-bg-tertiary: #334155;
+        --color-text-primary: #f8fafc;
+        --color-text-secondary: #cbd5e1;
+        --color-text-tertiary: #64748b;
+    }
+    
+    .file-item:hover {
+        background: var(--color-bg-tertiary);
+    }
+}
+
+/* ==================== 身份验证样式 ==================== */
+
+/**
+ * 头部操作区域
+ * 包含身份验证状态和操作按钮
+ */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+/**
+ * 身份验证状态显示
+ */
+.auth-status {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    padding: var(--spacing-xs) var(--spacing-md);
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-full);
+    color: white;
+}
+
+.auth-status svg {
+    width: 16px;
+    height: 16px;
+}
+
+/**
+ * 身份验证容器
+ * 登录界面的外层容器
+ */
+.auth-container {
+    background: var(--color-bg-primary);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: var(--spacing-2xl);
+    max-width: 500px;
+    margin: var(--spacing-xl) auto;
+}
+
+/**
+ * 身份验证面板
+ * 登录表单的主要内容区域
+ */
+.auth-panel {
+    text-align: center;
+}
+
+/**
+ * 身份验证图标
+ */
+.auth-icon {
+    margin-bottom: var(--spacing-lg);
+    color: var(--color-primary);
+    transition: transform var(--transition-base);
+}
+
+.auth-container:hover .auth-icon {
+    transform: scale(1.1);
+}
+
+/**
+ * 身份验证标题
+ */
+.auth-title {
+    font-size: var(--font-size-2xl);
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+/**
+ * 身份验证描述
+ */
+.auth-description {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-xl);
+}
+
+/**
+ * 身份验证表单
+ */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    text-align: left;
+}
+
+/**
+ * 身份验证输入框组
+ */
+.auth-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+/**
+ * 身份验证标签
+ */
+.auth-label {
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    color: var(--color-text-primary);
+}
+
+/**
+ * 身份验证输入框
+ */
+.auth-input {
+    padding: var(--spacing-md);
+    border: 2px solid var(--color-bg-tertiary);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-base);
+    font-family: inherit;
+    transition: all var(--transition-fast);
+}
+
+.auth-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+.auth-input::placeholder {
+    color: var(--color-text-tertiary);
+}
+
+/**
+ * 身份验证按钮
+ */
+.auth-button {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+    color: white;
+    border: none;
+    padding: var(--spacing-md) var(--spacing-xl);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: var(--font-size-base);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-fast);
+}
+
+.auth-button:hover {
+    background: linear-gradient(135deg, var(--color-primary-hover) 0%, #1e3a8a 100%);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+}
+
+.auth-button:active {
+    transform: translateY(0);
+}
+
+/**
+ * 身份验证页脚
+ */
+.auth-footer {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-tertiary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    margin-top: var(--spacing-lg);
+}
+
+.auth-footer svg {
+    width: 14px;
+    height: 14px;
+}
+
+/* ==================== LightYear 通知组件样式 ==================== */
+
+/**
+ * LightYear 加载动画容器
+ */
+#lyear-loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/**
+ * Bootstrap Spinner 旋转加载动画
+ */
+.spinner-border {
+    display: inline-block;
+    width: 3rem;
+    height: 3rem;
+    vertical-align: text-bottom;
+    border: 0.25em solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spinner-border .75s linear infinite;
+}
+
+.spinner-border.text-primary {
+    color: var(--color-primary);
+}
+
+@keyframes spinner-border {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/**
+ * 辅助工具类：用于隐藏元素
+ */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/**
+ * Bootstrap Notify 通知容器
+ * 通知消息显示在页面顶部居中位置
+ */
+[data-notify="container"] {
+    position: fixed;
+    z-index: 10800;
+    max-width: 400px;
+}
+
+[data-notify="container"][data-notify-position="top-center"] {
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/**
+ * 通知消息框样式
+ */
+.alert {
+    position: relative;
+    padding: var(--spacing-md) var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.alert-success {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+    color: #0c5460;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    border-color: #ffeaa7;
+    color: #856404;
+}
+
+/**
+ * 通知消息图标样式
+ */
+.alert[data-notify="icon"] {
+    font-size: 1.5rem;
+    line-height: 1;
+}
+
+/**
+ * 通知消息关闭按钮
+ */
+[data-notify="dismiss"] {
+    position: absolute;
+    right: var(--spacing-md);
+    top: var(--spacing-md);
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity var(--transition-fast);
+}
+
+[data-notify="dismiss"]:hover {
+    opacity: 1;
+}
+
+/**
+ * 动画效果
+ */
+.animated {
+    animation-duration: 1s;
+    animation-fill-mode: both;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 100%, 0);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+.fadeInUp {
+    animation-name: fadeInUp;
+}
+
+@keyframes fadeOutDown {
+    from {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translate3d(0, 100%, 0);
+    }
+}
+
+.fadeOutDown {
+    animation-name: fadeOutDown;
+}
+
+@keyframes shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    10%, 30%, 50%, 70%, 90% {
+        transform: translateX(-10px);
+    }
+    20%, 40%, 60%, 80% {
+        transform: translateX(10px);
+    }
+}
+
+.shake {
+    animation-name: shake;
+}
+
